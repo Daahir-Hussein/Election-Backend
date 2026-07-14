@@ -1,0 +1,15 @@
+.vs/
+bin/
+obj/
+
+*.user
+*.suo
+
+publish/
+packages/
+
+appsettings.Development.json
+
+node_modules/
+dist/
+build/
