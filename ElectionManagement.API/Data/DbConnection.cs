@@ -1,13 +1,46 @@
-﻿using Microsoft.Data.SqlClient;
+﻿//using Microsoft.Data.SqlClient;
+
+//namespace ElectionManagement.API.Data
+//{
+//    public class DbConnection
+//    {
+//        public static SqlConnection GetConnection()
+//        {
+//            return new SqlConnection(
+//                "Server=DESKTOP-DM86IDB;Database=ElectionDB;Trusted_Connection=True;TrustServerCertificate=True;");
+//        }
+//    }
+//}
+
+
+
+using Microsoft.Data.SqlClient;
 
 namespace ElectionManagement.API.Data
 {
-    public class DbConnection
+    public static class DbConnection
     {
+        private static string? _connectionString;
+
+        public static void Configure(IConfiguration configuration)
+        {
+            _connectionString =
+                configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException(
+                    "DefaultConnection is not configured."
+                );
+        }
+
         public static SqlConnection GetConnection()
         {
-            return new SqlConnection(
-                "Server=DESKTOP-DM86IDB;Database=ElectionDB;Trusted_Connection=True;TrustServerCertificate=True;");
+            if (string.IsNullOrWhiteSpace(_connectionString))
+            {
+                throw new InvalidOperationException(
+                    "Database connection has not been initialized."
+                );
+            }
+
+            return new SqlConnection(_connectionString);
         }
     }
 }
